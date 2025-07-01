@@ -4,7 +4,7 @@ from io import BytesIO
 import os
 import re
 
-st.title('Shareholding Data Uploader & Pivot')
+st.title('Holdings Manager')
 
 uploaded_files = st.file_uploader(
     'Upload as many Excel or CSV shareholding statements as you want',
@@ -58,7 +58,7 @@ if uploaded_files:
             aggfunc='sum',
             fill_value=0
         )
-        st.subheader('Pivot Table: Company vs Owner (Shares)')
+        st.subheader('Holdings')
         st.dataframe(pivot_df)
 
         # Export buttons
