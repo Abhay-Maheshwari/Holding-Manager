@@ -84,4 +84,4 @@ if uploaded_files:
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
 else:
-    st.info('Please upload 5–6 Excel or CSV files to begin.') 
+    st.info('Please upload as many Excel or CSV files as you want to begin.') 
