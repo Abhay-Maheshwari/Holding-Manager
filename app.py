@@ -7,7 +7,7 @@ import re
 st.title('Shareholding Data Uploader & Pivot')
 
 uploaded_files = st.file_uploader(
-    'Upload 5–6 Excel or CSV shareholding statements',
+    'Upload as many Excel or CSV shareholding statements as you want',
     type=['csv', 'xlsx'],
     accept_multiple_files=True
 )
@@ -31,7 +31,7 @@ if uploaded_files:
             if file.name.endswith('.csv'):
                 df = pd.read_csv(file)
             else:
-                df = pd.read_excel(file, header=1)  # Skip the first row
+                df = pd.read_excel(file, header=5)  # Skip the first 5 lines
             # Exclude the last row (totals or summary)
             if len(df) > 1:
                 df = df.iloc[:-1]
