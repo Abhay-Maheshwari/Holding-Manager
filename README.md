@@ -1,4 +1,4 @@
-# Shareholding Data Uploader & Pivot
+# Holdings Manager
 
 This web app allows you to upload multiple shareholding statement files (Excel or CSV), automatically extract and merge the relevant data, and generate a pivot table showing company-wise shareholdings for each owner. You can also export the pivot table as CSV or Excel.
 
