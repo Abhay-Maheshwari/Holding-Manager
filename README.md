@@ -3,7 +3,7 @@
 This web app allows you to upload multiple shareholding statement files (Excel or CSV), automatically extract and merge the relevant data, and generate a pivot table showing company-wise shareholdings for each owner. You can also export the pivot table as CSV or Excel.
 
 ## Features
-- Upload 5–6 Excel or CSV shareholding statement files at once
+- Upload 9-10 Excel or CSV shareholding statement files at once
 - Automatically extracts 'Company Name' and 'Free' columns
 - Owner name is auto-extracted from the file name (between 'CLIENT' and 'CLIENT-ID')
 - Skips the first row (for Excel files) and the last row (totals/summary) in each file
@@ -38,8 +38,8 @@ This web app allows you to upload multiple shareholding statement files (Excel o
 5. Download the pivot table as CSV or Excel for further analysis or sharing.
 
 ## Example File Naming
-- `Client REETA MAHESHWARI Client-ID 288 Demat 1206960000000817.xlsx`
-- `Client DINESH MAHESHWARI HUF Client-ID 934 Demat 1206960000006804.xlsx`
+- `Client 123 Client-ID 2xx Demat 8xxxxx.xlsx`
+- `Client ABC Client-ID 9xx Demat 9xxxxxxx.xlsx`
 
 The owner name will be extracted as 'REETA MAHESHWARI' and 'DINESH MAHESHWARI HUF' respectively.
 
@@ -48,6 +48,3 @@ The owner name will be extracted as 'REETA MAHESHWARI' and 'DINESH MAHESHWARI HU
 - streamlit
 - pandas
 - openpyxl
-
-## License
-MIT 
