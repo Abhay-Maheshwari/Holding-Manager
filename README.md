@@ -13,6 +13,11 @@ This web app allows you to upload multiple shareholding statement files (Excel o
   - Values: Shares (Free)
 - Download the pivot table as CSV or Excel
 
+## 🚀 Live Demo
+
+👉 Try it now: [hold-letter.streamlit.app](https://hold-letter.streamlit.app)
+
+
 ## Setup Instructions
 1. **Clone the repository:**
    ```bash
@@ -41,7 +46,7 @@ This web app allows you to upload multiple shareholding statement files (Excel o
 - `Client 123 Client-ID 2xx Demat 8xxxxx.xlsx`
 - `Client ABC Client-ID 9xx Demat 9xxxxxxx.xlsx`
 
-The owner name will be extracted as 'REETA MAHESHWARI' and 'DINESH MAHESHWARI HUF' respectively.
+The owner name will be extracted as '123' and 'ABC' respectively.
 
 ## Requirements
 - Python 3.8+
