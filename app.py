@@ -71,6 +71,13 @@ if uploaded_files:
             aggfunc='sum',
             fill_value=0
         )
+        # Add a 'Total Holdings' column summing across all owners for each company
+        pivot_df['Total Holdings'] = pivot_df.sum(axis=1)
+        # Ensure 'Total Holdings' is the last column
+        cols = list(pivot_df.columns)
+        if 'Total Holdings' in cols:
+            cols = [c for c in cols if c != 'Total Holdings'] + ['Total Holdings']
+            pivot_df = pivot_df[cols]
         # Show the pivot table in the app
         st.subheader('Holdings')
         st.dataframe(pivot_df)
