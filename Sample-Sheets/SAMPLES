@@ -1,0 +1,12 @@
+This folder contains dummy shareholding statement files in Excel format, generated to simulate real-world input for the Holdings Manager app.
+
+Each file mimics the original structure of client shareholding statements, including columns like:
+- ISIN Code
+- Company Name
+- Free (Number of shares held)
+- Additional columns (Pledge, Remat, Demat, etc.) to maintain format fidelity
+
+Note:
+Owner names are intentionally extracted from the file name (e.g., between "Client" and "Client-ID").
+All data is fictional and generated for demonstration purposes only.
+You can upload 5–10 of these files at once in the app to test pivot table generation and export functionality.
