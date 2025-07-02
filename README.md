@@ -4,9 +4,8 @@ This web app allows you to upload multiple shareholding statement files (Excel o
 
 ## Features
 - Upload 9-10 Excel or CSV shareholding statement files at once
-- Automatically extracts 'Company Name' and 'Free' columns
+- Automatically extracts 'Company Name' and 'Total' columns
 - Owner name is auto-extracted from the file name (between 'CLIENT' and 'CLIENT-ID')
-- Skips the first row (for Excel files) and the last row (totals/summary) in each file
 - Merges all data and creates a pivot table:
   - Rows: Company Name
   - Columns: Owner Name
