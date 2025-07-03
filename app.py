@@ -4,22 +4,37 @@ from io import BytesIO
 import os
 import re
 from datetime import datetime
+import hashlib
 
 # Set the title of the Streamlit app
 st.title('Holdings Manager')
 
-# --- Password Protection ---
-PASSWORD = os.environ.get("APP_PASSWORD")  # Read password from environment variable
-if PASSWORD is None:
-    st.warning("Warning: APP_PASSWORD environment variable is not set. Password protection will not work.")
+# --- Allowed Passwords from Streamlit secrets.toml ---
+ALLOWED_PASSWORDS = [
+    st.secrets.get("password1", ""),
+    st.secrets.get("password2", ""),
+    st.secrets.get("password3", ""),
+]
+ALLOWED_PASSWORDS = [p for p in ALLOWED_PASSWORDS if p]  # Remove empty entries
 if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
+if "current_password" not in st.session_state:
+    st.session_state["current_password"] = None
 
+# Function to hash the password for folder separation
+def get_password_hash(password):
+    if password is None:
+        return "default"
+    return hashlib.sha256(password.encode()).hexdigest()
+
+# Password authentication
 if not st.session_state["authenticated"]:
     pwd = st.text_input("Enter password to access save/delete features", type="password")
     if st.button("Login"):
-        if pwd == PASSWORD:
+        if pwd in ALLOWED_PASSWORDS:
             st.session_state["authenticated"] = True
+            st.session_state["password_hash"] = get_password_hash(pwd)
+            st.session_state["current_password"] = pwd
             st.success("Access granted!")
         else:
             st.error("Incorrect password")
@@ -131,23 +146,25 @@ if uploaded_files:
 if st.session_state["authenticated"]:
     st.markdown("---")
     st.header("Save/Delete/Load Pivot Table")
-    os.makedirs("saved_pivots", exist_ok=True)
+    # Use a per-password folder for saved pivots
+    user_folder = os.path.join("saved_pivots", get_password_hash(st.session_state["current_password"]))
+    os.makedirs(user_folder, exist_ok=True)
     # Save pivot table (only if available)
     if pivot_df is not None:
         if st.button("Save Pivot Table"):
             now = datetime.now()
             save_name = f"Pivot_Date-{now.strftime('%d-%m-%Y')}_Time-{now.strftime('%H-%M-%S')}"
-            pivot_df.to_csv(f"saved_pivots/{save_name}.csv")
+            pivot_df.to_csv(f"{user_folder}/{save_name}.csv")
             st.success(f"Saved as {save_name}.csv")
     # List, load, and delete saved pivots
-    saved_files = os.listdir("saved_pivots") if os.path.exists("saved_pivots") else []
+    saved_files = os.listdir(user_folder) if os.path.exists(user_folder) else []
     if saved_files:
         file_to_manage = st.selectbox("Select a saved pivot:", saved_files)
         if st.button("Delete Selected Pivot"):
-            os.remove(f"saved_pivots/{file_to_manage}")
+            os.remove(f"{user_folder}/{file_to_manage}")
             st.success(f"Deleted {file_to_manage}")
         if st.button("Load/View Selected Pivot"):
-            loaded_df = pd.read_csv(f"saved_pivots/{file_to_manage}", index_col=0)
+            loaded_df = pd.read_csv(f"{user_folder}/{file_to_manage}", index_col=0)
             st.subheader(f"Loaded Pivot Table: {file_to_manage}")
             st.dataframe(loaded_df)
     else:
