@@ -170,6 +170,25 @@ if st.session_state["authenticated"]:
     else:
         st.info("No saved pivots found.")
 
+# --- View Downloaded Pivot Table ---
+st.markdown("---")
+st.header("View Downloaded Pivot Table")
+view_file = st.file_uploader(
+    "Upload a previously downloaded pivot table (CSV or Excel) to view it here.",
+    type=["csv", "xlsx"],
+    key="view_pivot"
+)
+if view_file is not None:
+    try:
+        if view_file.name.endswith(".csv"):
+            view_df = pd.read_csv(view_file, index_col=0)
+        else:
+            view_df = pd.read_excel(view_file, index_col=0)
+        st.subheader(f"Preview: {view_file.name}")
+        st.dataframe(view_df)
+    except Exception as e:
+        st.error(f"Could not load file: {e}")
+
 else:
     # Show info message if no files are uploaded
     st.info('Please upload as many Excel or CSV files as you want to begin.') 
