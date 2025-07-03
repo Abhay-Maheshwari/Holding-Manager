@@ -9,7 +9,9 @@ from datetime import datetime
 st.title('Holdings Manager')
 
 # --- Password Protection ---
-PASSWORD = "1234"  # Change this to your desired password
+PASSWORD = os.environ.get("APP_PASSWORD")  # Read password from environment variable
+if PASSWORD is None:
+    st.warning("Warning: APP_PASSWORD environment variable is not set. Password protection will not work.")
 if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
 
