@@ -3,9 +3,38 @@ import pandas as pd
 from io import BytesIO
 import os
 import re
+from streamlit_oauth import OAuth2Component
+import sqlite3
 
 # Set the title of the Streamlit app
 st.title('Holdings Manager')
+
+# --- GOOGLE OAUTH LOGIN SETUP ---
+# Use Streamlit secrets for credentials (set in .streamlit/secrets.toml or Streamlit Cloud UI)
+client_id = st.secrets["google_client_id"]
+client_secret = st.secrets["google_client_secret"]
+redirect_uri = "http://localhost:8501"  # Or your deployed URL
+
+oauth2 = OAuth2Component(
+    client_id=client_id,
+    client_secret=client_secret,
+    authorize_endpoint="https://accounts.google.com/o/oauth2/v2/auth",
+    token_endpoint="https://oauth2.googleapis.com/token"
+)
+
+token = oauth2.authorize_button(
+    "Login with Google",
+    redirect_uri=redirect_uri,
+    scope="openid email profile"
+)
+
+if token:
+    user_info = oauth2.get_user_info(token, user_info_endpoint="https://openidconnect.googleapis.com/v1/userinfo")
+    user_email = user_info['email']
+    st.success(f"Logged in as {user_email}")
+else:
+    st.warning("Please log in with Google to use the app.")
+    st.stop()
 
 # File uploader widget for multiple Excel/CSV files
 uploaded_files = st.file_uploader(
@@ -81,6 +110,15 @@ if uploaded_files:
         # Show the pivot table in the app
         st.subheader('Holdings')
         st.dataframe(pivot_df)
+
+        # --- SAVE PIVOT TABLE TO USER-SPECIFIC SQLITE DB TABLE ---
+        def save_pivot_to_db(pivot_df, user_email, db_path='holdings.db'):
+            df_to_save = pivot_df.reset_index()
+            table_name = f"pivot_{re.sub(r'[^a-zA-Z0-9]', '_', user_email)}"
+            conn = sqlite3.connect(db_path)
+            df_to_save.to_sql(table_name, conn, if_exists='replace', index=False)
+            conn.close()
+        save_pivot_to_db(pivot_df, user_email)
 
         # Helper function to export DataFrame as CSV
         def to_csv(df):
