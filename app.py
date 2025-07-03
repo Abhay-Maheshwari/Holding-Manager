@@ -9,7 +9,7 @@ from datetime import datetime
 st.title('Holdings Manager')
 
 # --- Password Protection ---
-PASSWORD = "your_secret_password"  # Change this to your desired password
+PASSWORD = "1234"  # Change this to your desired password
 if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
 
@@ -42,6 +42,8 @@ def extract_owner_from_filename(filename):
     if match:
         return match.group(1).strip().replace('_', ' ').replace('-', ' ')
     return os.path.splitext(filename)[0]
+
+pivot_df = None  # Will hold the current pivot table if available
 
 # Main logic: only runs if files are uploaded
 if uploaded_files:
@@ -123,29 +125,31 @@ if uploaded_files:
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
 
-        # --- Save/Delete/Load Pivot Table (Password Protected) ---
-        if st.session_state["authenticated"]:
-            st.markdown("---")
-            st.header("Save/Delete/Load Pivot Table")
-            os.makedirs("saved_pivots", exist_ok=True)
-            # Save pivot table
-            save_name = st.text_input("Save as (filename):", value=f"pivot_{datetime.now().strftime('%Y%m%d_%H%M%S')}")
-            if st.button("Save Pivot Table"):
-                pivot_df.to_csv(f"saved_pivots/{save_name}.csv")
-                st.success(f"Saved as {save_name}.csv")
-            # List, load, and delete saved pivots
-            saved_files = os.listdir("saved_pivots") if os.path.exists("saved_pivots") else []
-            if saved_files:
-                file_to_manage = st.selectbox("Select a saved pivot:", saved_files)
-                if st.button("Delete Selected Pivot"):
-                    os.remove(f"saved_pivots/{file_to_manage}")
-                    st.success(f"Deleted {file_to_manage}")
-                if st.button("Load/View Selected Pivot"):
-                    loaded_df = pd.read_csv(f"saved_pivots/{file_to_manage}", index_col=0)
-                    st.subheader(f"Loaded Pivot Table: {file_to_manage}")
-                    st.dataframe(loaded_df)
-            else:
-                st.info("No saved pivots found.")
+# --- Save/Delete/Load Pivot Table (Password Protected) ---
+if st.session_state["authenticated"]:
+    st.markdown("---")
+    st.header("Save/Delete/Load Pivot Table")
+    os.makedirs("saved_pivots", exist_ok=True)
+    # Save pivot table (only if available)
+    if pivot_df is not None:
+        save_name = st.text_input("Save as (filename):", value=f"pivot_{datetime.now().strftime('%Y%m%d_%H%M%S')}")
+        if st.button("Save Pivot Table"):
+            pivot_df.to_csv(f"saved_pivots/{save_name}.csv")
+            st.success(f"Saved as {save_name}.csv")
+    # List, load, and delete saved pivots
+    saved_files = os.listdir("saved_pivots") if os.path.exists("saved_pivots") else []
+    if saved_files:
+        file_to_manage = st.selectbox("Select a saved pivot:", saved_files)
+        if st.button("Delete Selected Pivot"):
+            os.remove(f"saved_pivots/{file_to_manage}")
+            st.success(f"Deleted {file_to_manage}")
+        if st.button("Load/View Selected Pivot"):
+            loaded_df = pd.read_csv(f"saved_pivots/{file_to_manage}", index_col=0)
+            st.subheader(f"Loaded Pivot Table: {file_to_manage}")
+            st.dataframe(loaded_df)
+    else:
+        st.info("No saved pivots found.")
+
 else:
     # Show info message if no files are uploaded
     st.info('Please upload as many Excel or CSV files as you want to begin.') 
