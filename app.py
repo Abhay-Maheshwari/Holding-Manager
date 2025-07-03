@@ -132,8 +132,9 @@ if st.session_state["authenticated"]:
     os.makedirs("saved_pivots", exist_ok=True)
     # Save pivot table (only if available)
     if pivot_df is not None:
-        save_name = st.text_input("Save as (filename):", value=f"pivot_{datetime.now().strftime('%Y%m%d_%H%M%S')}")
         if st.button("Save Pivot Table"):
+            now = datetime.now()
+            save_name = f"Pivot_Date-{now.strftime('%d-%m-%Y')}_Time-{now.strftime('%H-%M-%S')}"
             pivot_df.to_csv(f"saved_pivots/{save_name}.csv")
             st.success(f"Saved as {save_name}.csv")
     # List, load, and delete saved pivots
