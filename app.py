@@ -3,38 +3,24 @@ import pandas as pd
 from io import BytesIO
 import os
 import re
-from streamlit_oauth import OAuth2Component
-import sqlite3
+from datetime import datetime
 
 # Set the title of the Streamlit app
 st.title('Holdings Manager')
 
-# --- GOOGLE OAUTH LOGIN SETUP ---
-# Use Streamlit secrets for credentials (set in .streamlit/secrets.toml or Streamlit Cloud UI)
-client_id = st.secrets["google_client_id"]
-client_secret = st.secrets["google_client_secret"]
-redirect_uri = "http://localhost:8501"  # Or your deployed URL
+# --- Password Protection ---
+PASSWORD = "your_secret_password"  # Change this to your desired password
+if "authenticated" not in st.session_state:
+    st.session_state["authenticated"] = False
 
-oauth2 = OAuth2Component(
-    client_id=client_id,
-    client_secret=client_secret,
-    authorize_endpoint="https://accounts.google.com/o/oauth2/v2/auth",
-    token_endpoint="https://oauth2.googleapis.com/token"
-)
-
-token = oauth2.authorize_button(
-    "Login with Google",
-    redirect_uri=redirect_uri,
-    scope="openid email profile"
-)
-
-if token:
-    user_info = oauth2.get_user_info(token, user_info_endpoint="https://openidconnect.googleapis.com/v1/userinfo")
-    user_email = user_info['email']
-    st.success(f"Logged in as {user_email}")
-else:
-    st.warning("Please log in with Google to use the app.")
-    st.stop()
+if not st.session_state["authenticated"]:
+    pwd = st.text_input("Enter password to access save/delete features", type="password")
+    if st.button("Login"):
+        if pwd == PASSWORD:
+            st.session_state["authenticated"] = True
+            st.success("Access granted!")
+        else:
+            st.error("Incorrect password")
 
 # File uploader widget for multiple Excel/CSV files
 uploaded_files = st.file_uploader(
@@ -111,15 +97,6 @@ if uploaded_files:
         st.subheader('Holdings')
         st.dataframe(pivot_df)
 
-        # --- SAVE PIVOT TABLE TO USER-SPECIFIC SQLITE DB TABLE ---
-        def save_pivot_to_db(pivot_df, user_email, db_path='holdings.db'):
-            df_to_save = pivot_df.reset_index()
-            table_name = f"pivot_{re.sub(r'[^a-zA-Z0-9]', '_', user_email)}"
-            conn = sqlite3.connect(db_path)
-            df_to_save.to_sql(table_name, conn, if_exists='replace', index=False)
-            conn.close()
-        save_pivot_to_db(pivot_df, user_email)
-
         # Helper function to export DataFrame as CSV
         def to_csv(df):
             return df.to_csv().encode('utf-8')
@@ -145,6 +122,30 @@ if uploaded_files:
             file_name="pivoted_shareholding.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
+
+        # --- Save/Delete/Load Pivot Table (Password Protected) ---
+        if st.session_state["authenticated"]:
+            st.markdown("---")
+            st.header("Save/Delete/Load Pivot Table")
+            os.makedirs("saved_pivots", exist_ok=True)
+            # Save pivot table
+            save_name = st.text_input("Save as (filename):", value=f"pivot_{datetime.now().strftime('%Y%m%d_%H%M%S')}")
+            if st.button("Save Pivot Table"):
+                pivot_df.to_csv(f"saved_pivots/{save_name}.csv")
+                st.success(f"Saved as {save_name}.csv")
+            # List, load, and delete saved pivots
+            saved_files = os.listdir("saved_pivots") if os.path.exists("saved_pivots") else []
+            if saved_files:
+                file_to_manage = st.selectbox("Select a saved pivot:", saved_files)
+                if st.button("Delete Selected Pivot"):
+                    os.remove(f"saved_pivots/{file_to_manage}")
+                    st.success(f"Deleted {file_to_manage}")
+                if st.button("Load/View Selected Pivot"):
+                    loaded_df = pd.read_csv(f"saved_pivots/{file_to_manage}", index_col=0)
+                    st.subheader(f"Loaded Pivot Table: {file_to_manage}")
+                    st.dataframe(loaded_df)
+            else:
+                st.info("No saved pivots found.")
 else:
     # Show info message if no files are uploaded
     st.info('Please upload as many Excel or CSV files as you want to begin.') 
