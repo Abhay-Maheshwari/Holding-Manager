@@ -14,6 +14,7 @@ ALLOWED_PASSWORDS = [
     st.secrets.get("password1", ""),
     st.secrets.get("password2", ""),
     st.secrets.get("password3", ""),
+    st.secrets.get("password4", ""),
 ]
 ALLOWED_PASSWORDS = [p for p in ALLOWED_PASSWORDS if p]  # Remove empty entries
 if "authenticated" not in st.session_state:
