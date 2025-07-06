@@ -5,6 +5,7 @@ import os
 import re
 from datetime import datetime
 import hashlib
+import pytz
 
 # Set the title of the Streamlit app
 st.title('Holdings Manager')
@@ -137,7 +138,8 @@ if uploaded_files:
             mime="text/csv"
         )
         # Download button for Excel
-        now = datetime.now()
+        ist = pytz.timezone('Asia/Kolkata')
+        now = datetime.now(ist)
         excel_filename = f"pivot - {now.strftime('%d-%m-%Y')} - {now.strftime('%H-%M-%S')}.xlsx"
         st.download_button(
             label="Download as Excel",
@@ -156,7 +158,8 @@ if st.session_state["authenticated"]:
     # Save pivot table (only if available)
     if pivot_df is not None:
         if st.button("Save Pivot Table"):
-            now = datetime.now()
+            ist = pytz.timezone('Asia/Kolkata')
+            now = datetime.now(ist)
             save_name = f"Pivot_Date-{now.strftime('%d-%m-%Y')}_Time-{now.strftime('%H-%M-%S')}"
             pivot_df.to_csv(f"{user_folder}/{save_name}.csv")
             st.success(f"Saved as {save_name}.csv")
