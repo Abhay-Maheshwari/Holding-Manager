@@ -1,53 +1,124 @@
-# Shareholding Data Uploader & Pivot
 
-This web app allows you to upload multiple shareholding statement files (Excel or CSV), automatically extract and merge the relevant data, and generate a pivot table showing company-wise shareholdings for each owner. You can also export the pivot table as CSV or Excel.
+# 📊 Holdings Manager – Shareholding Data Uploader & Pivot Viewer
 
-## Features
-- Upload 5–6 Excel or CSV shareholding statement files at once
-- Automatically extracts 'Company Name' and 'Free' columns
-- Owner name is auto-extracted from the file name (between 'CLIENT' and 'CLIENT-ID')
-- Skips the first row (for Excel files) and the last row (totals/summary) in each file
-- Merges all data and creates a pivot table:
-  - Rows: Company Name
-  - Columns: Owner Name
-  - Values: Shares (Free)
-- Download the pivot table as CSV or Excel
+A powerful Streamlit-based web app to **upload, process, and analyze** multiple demat/shareholding statement files (Excel or CSV) into a clean pivot table format. Ideal for individuals and financial professionals managing multi-account portfolios.
 
-## Setup Instructions
-1. **Clone the repository:**
-   ```bash
-   git clone <your-github-repo-url>
-   cd <repo-directory>
-   ```
-2. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. **Run the app:**
-   ```bash
-   streamlit run app.py
-   ```
-4. **Open your browser:**
-   Go to the URL shown in the terminal (usually http://localhost:8501 or similar).
+---
 
-## Usage
-1. Prepare your shareholding statement files in Excel or CSV format. The files should have columns like 'Company Name' and 'Free'.
-2. The app will skip the first row (for Excel) and the last row (totals/summary) automatically.
-3. Upload your files using the uploader.
-4. The app will display a pivot table with company names as rows and owner names (from file names) as columns.
-5. Download the pivot table as CSV or Excel for further analysis or sharing.
+## 🚀 Key Features
 
-## Example File Naming
-- `Client REETA MAHESHWARI Client-ID 288 Demat 1206960000000817.xlsx`
-- `Client DINESH MAHESHWARI HUF Client-ID 934 Demat 1206960000006804.xlsx`
+- ✅ Upload **multiple Excel/CSV** shareholding statements at once  
+- 🧠 Auto-extracts:
+  - **Company Name** and **Free/Total** holdings
+  - **Owner name** from file name (between `CLIENT` and `CLIENT-ID`)
+- 🧹 Skips:
+  - First 5 rows (Excel)
+  - Last row (totals/summary)
+- 📊 Generates a pivot table:
+  - **Rows:** Company Name  
+  - **Columns:** Owner Name  
+  - **Values:** Share count (from ‘Total’ column)
+- 💾 Download the pivot table in:
+  - CSV  
+  - Excel (with timestamped filename)
+- 🔐 Password-protected features:
+  - Save pivot tables (user-isolated by password hash)
+  - View previously saved pivots
+  - Delete old pivots
+- 🔁 View previously downloaded pivot tables by uploading them again
 
-The owner name will be extracted as 'REETA MAHESHWARI' and 'DINESH MAHESHWARI HUF' respectively.
+---
 
-## Requirements
-- Python 3.8+
-- streamlit
-- pandas
-- openpyxl
+## 📁 Example File Naming
 
-## License
-MIT 
+These examples demonstrate how the app extracts the **owner name** automatically:
+
+```
+Client PERSON A Client-ID 123 Demat 1234567890123456.xlsx
+Client ENTITY B Client-ID 456 Demat 6543210987654321.xlsx
+```
+
+Extracted names will be:  
+`PERSON A`, `ENTITY B`
+
+---
+
+## 🛠 Setup Instructions
+
+### 1. Clone the repository:
+
+```bash
+git clone https://github.com/your-username/holdings-manager.git
+cd holdings-manager
+```
+
+### 2. Install the dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Add passwords for saving/viewing pivots:
+
+Create a file: `.streamlit/secrets.toml`
+
+```toml
+[general]
+password1 = "demo123"
+password2 = "client456"
+password3 = "..."
+```
+
+### 4. Run the app:
+
+```bash
+streamlit run app.py
+```
+
+Open the browser at the address shown in the terminal (e.g., `http://localhost:8501`).
+
+---
+
+## 🧪 How to Use
+
+1. Prepare your demat statements in `.xlsx` or `.csv` format.
+2. Click **Upload** and select multiple files.
+3. App automatically extracts:
+   - Owner name from file name
+   - Relevant columns for company and total shares
+4. View the live pivot table (filterable and scrollable).
+5. Download the pivot table as **CSV** or **Excel**.
+6. Use password login to:
+   - Save your pivot table
+   - Reload old ones
+   - Delete any previous data saved under your login
+
+---
+
+## 📦 Requirements
+
+- `Python 3.8+`
+- `streamlit`
+- `pandas`
+- `openpyxl`
+- `pytz`
+- `pdfplumber` *(optional, if PDFs are later added)*
+
+Install via:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 📄 License
+
+MIT License – use freely, modify, and share with credit.
+
+---
+
+## 👤 Author
+
+**Abhay Maheshwari**  
+💼 [LinkedIn](https://linkedin.com/maheshwari-abhay) | 🛠️ [GitHub](https://github.com/abhay-maheshwari)
