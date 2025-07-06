@@ -1,0 +1,4 @@
+# This file ensures the assets folder is tracked by git
+# Upload your favicon files here:
+# - favicon-light.png (for light theme)
+# - favicon-dark.png (for dark theme) 
