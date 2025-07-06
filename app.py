@@ -11,7 +11,7 @@ import pytz
 st.set_page_config(
     page_title="Holdings Manager",
     page_icon="assets/favicon-light.ico",
-    layout="wide",
+    layout="centered",
     initial_sidebar_state="expanded"
 )
 
