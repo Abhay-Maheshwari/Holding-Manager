@@ -80,8 +80,8 @@ if uploaded_files:
             if len(df) > 1:
                 df = df.iloc[:-1]
             # Select the second column as 'Company Name' and the ninth column as 'Total'
-            if df.shape[1] > 8:
-                df = df.iloc[:, [1, 8]]  # [1] is Company Name, [8] is Total
+            if df.shape[1] > 9:
+                df = df.iloc[:, [1, 9]]  # [1] is Company Name, [8] is Total
                 df.columns = ['Company Name', 'Total']  # Rename columns for clarity
                 df['Owner Name'] = owner  # Add owner name column
                 all_data.append(df)  # Add to list for merging
