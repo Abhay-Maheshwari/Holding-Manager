@@ -11,9 +11,6 @@ A powerful Streamlit-based web app to **upload, process, and analyze** multiple 
 - 🧠 Auto-extracts:
   - **Company Name** and **Free/Total** holdings
   - **Owner name** from file name (between `CLIENT` and `CLIENT-ID`)
-- 🧹 Skips:
-  - First 5 rows (Excel)
-  - Last row (totals/summary)
 - 📊 Generates a pivot table:
   - **Rows:** Company Name  
   - **Columns:** Owner Name  
