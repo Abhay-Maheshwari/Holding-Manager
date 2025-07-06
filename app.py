@@ -17,6 +17,7 @@ ALLOWED_PASSWORDS = [
     st.secrets.get("password4", ""),
 ]
 ALLOWED_PASSWORDS = [p for p in ALLOWED_PASSWORDS if p]  # Remove empty entries
+
 if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
 if "current_password" not in st.session_state:
@@ -136,10 +137,12 @@ if uploaded_files:
             mime="text/csv"
         )
         # Download button for Excel
+        now = datetime.now()
+        excel_filename = f"pivot - {now.strftime('%d-%m-%Y')} - {now.strftime('%H-%M-%S')}.xlsx"
         st.download_button(
             label="Download as Excel",
             data=to_excel(pivot_df),
-            file_name="pivoted_shareholding.xlsx",
+            file_name=excel_filename,
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
 
