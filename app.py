@@ -7,6 +7,14 @@ from datetime import datetime
 import hashlib
 import pytz
 
+# Configure the page
+st.set_page_config(
+    page_title="Holdings Manager",
+    page_icon="assets/favicon-light.ico",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 # Set the title of the Streamlit app
 st.title('Holdings Manager')
 
