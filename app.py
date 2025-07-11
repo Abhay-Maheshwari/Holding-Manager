@@ -76,6 +76,32 @@ pivot_df = None  # Will hold the current pivot table if available
 # Main logic: only runs if files are uploaded
 if uploaded_files:
     st.success(f"{len(uploaded_files)} file(s) uploaded.")
+    
+    # Check for duplicate filenames
+    filenames = [file.name for file in uploaded_files]
+    duplicate_filenames = [name for name in set(filenames) if filenames.count(name) > 1]
+    
+    if duplicate_filenames:
+        st.warning("⚠️ **Duplicate Files Detected!**")
+        st.info("""
+        **What happens with duplicate filenames:**
+        - Both files will be processed and their data will be combined
+        - The same owner name will be extracted from both files
+        - Holdings for the same company will be summed together
+        - This may result in inflated totals if the same data is uploaded twice
+        
+        **Duplicate files found:** """ + ", ".join(duplicate_filenames))
+        
+        # Show duplicate files in a more detailed way
+        with st.expander("📋 View Duplicate Files Details"):
+            for dup_name in duplicate_filenames:
+                dup_count = filenames.count(dup_name)
+                st.write(f"**{dup_name}** appears {dup_count} time(s)")
+                # Show which files are duplicates
+                dup_files = [f for f in uploaded_files if f.name == dup_name]
+                for i, file in enumerate(dup_files, 1):
+                    st.write(f"  {i}. Size: {file.size} bytes")
+    
     for i, file in enumerate(uploaded_files, 1):
         # Extract owner name from file name
         owner = extract_owner_from_filename(file.name)
@@ -107,6 +133,30 @@ if uploaded_files:
         # Convert the 'Total' column to numeric (in case of text/NaN)
         merged_df['Total'] = pd.to_numeric(merged_df['Total'], errors='coerce')
         merged_df['Total'] = merged_df['Total'].fillna(0)
+        
+        # Show data aggregation summary if duplicates were detected
+        if duplicate_filenames:
+            st.info("📊 **Data Aggregation Summary**")
+            with st.expander("🔍 View how your data will be combined"):
+                # Show sample of data that will be aggregated
+                st.write("**Sample of data that will be combined:**")
+                sample_data = merged_df[merged_df['Owner Name'].isin([
+                    extract_owner_from_filename(name) for name in duplicate_filenames
+                ])].head(10)
+                if not sample_data.empty:
+                    st.dataframe(sample_data)
+                else:
+                    st.write("No sample data available for preview.")
+                
+                # Show aggregation explanation
+                st.write("""
+                **How aggregation works:**
+                - Files with the same name → Same owner name extracted
+                - Same company + Same owner → Holdings will be summed
+                - Example: If 'ABC Corp' appears in both files under 'John Doe', 
+                  the total will be: File1_ABC_Corp + File2_ABC_Corp
+                """)
+        
         # Create a pivot table: rows=Company Name, columns=Owner Name, values=Total
         pivot_df = pd.pivot_table(
             merged_df,
