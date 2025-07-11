@@ -3,26 +3,73 @@
 
 A powerful Streamlit-based web app to **upload, process, and analyze** multiple demat/shareholding statement files (Excel or CSV) into a clean pivot table format. Ideal for individuals and financial professionals managing multi-account portfolios.
 
----
+
 
 ## 🚀 Key Features
 
-- ✅ Upload **multiple Excel/CSV** shareholding statements at once  
-- 🧠 Auto-extracts:
-  - **Company Name** and **Free/Total** holdings
-  - **Owner name** from file name (between `CLIENT` and `CLIENT-ID`)
-- 📊 Generates a pivot table:
-  - **Rows:** Company Name  
-  - **Columns:** Owner Name  
-  - **Values:** Share count (from ‘Total’ column)
-- 💾 Download the pivot table in:
-  - CSV  
-  - Excel (with timestamped filename)
-- 🔐 Password-protected features:
-  - Save pivot tables (user-isolated by password hash)
-  - View previously saved pivots
-  - Delete old pivots
-- 🔁 View previously downloaded pivot tables by uploading them again
+This application offers a robust set of features to streamline your shareholding data management:
+
+### 1. 📁 File Upload
+
+- Multi-file Upload Support: Upload multiple CSV and Excel files simultaneously.
+
+### 2. 🧠 Smart Aggregation
+
+- Intelligent Client Matching: Merges data from files with the same client name automatically.
+
+- Duplicate Prevention: Prevents double entries by summing duplicate company holdings.
+
+### 3. 📊 Pivot Table
+
+- Dynamic Pivot Generation: Companies as rows, Owners as columns, and summed holdings as values.
+
+- Total Holdings Column: Auto-calculated totals across all owners for each company.
+
+- Interactive Table: Sort, search, scroll, and resize columns.
+
+### 4. ⬇️ Export Options
+
+- Download as CSV / Excel: Export pivot with auto-timestamped filenames.
+
+### 5. 🔐 Privacy & Security
+
+- 100% Local Execution: All processing happens on your system — no cloud involved.
+
+- Password-Protected Access: Enables secure Save/Delete/Load only after authentication.
+
+- Separate Save Folders: Each password creates its own secure save directory.
+
+### 6. 💾 Save & Load
+
+- Save Pivot Table Locally: One-click save with timestamped filenames.
+
+- Load Existing Pivots: Instantly preview previously saved tables.
+
+- Delete Pivots: Safely delete saved pivot files with one click.
+
+### 7. 🧩 File Compatibility
+
+- Mixed Format Uploads: Upload .csv and .xlsx in any order — works seamlessly.
+
+- Column Validation: Validates file structure and alerts if format is incorrect.
+
+- Error Messaging: Catches and displays detailed upload errors per file.
+
+### 8. 📂 Data Viewing
+
+- Upload Previous Downloads: View older exported pivot files by re-uploading them.
+
+### 9. 🧠 Automation & UX
+
+- Owner Name Detection from Filename: Auto-extracts names from filenames like CLIENT_NAME_CLIENT-ID_123.xlsx.
+
+- Audit-Ready Reporting: All files are timestamped, organized, and formatted for record-keeping.
+
+### 10. 🖥️ UI & Performance
+
+- Clean, Responsive UI: Built with Streamlit — fully responsive and centered layout.
+
+- Fast Performance: Handles large datasets smoothly with minimal memory use.
 
 ---
 
@@ -78,17 +125,18 @@ Open the browser at the address shown in the terminal (e.g., `http://localhost:8
 
 ## 🧪 How to Use
 
-1. Prepare your demat statements in `.xlsx` or `.csv` format.
-2. Click **Upload** and select multiple files.
-3. App automatically extracts:
+### 1. Prepare your demat statements in `.xlsx` or `.csv` format.
+### 2. Click **Upload** and select multiple files.
+### 3. App automatically extracts:
    - Owner name from file name
    - Relevant columns for company and total shares
-4. View the live pivot table (filterable and scrollable).
-5. Download the pivot table as **CSV** or **Excel**.
-6. Use password login to:
+### 4. View the live pivot table (filterable and scrollable).
+### 5. Download the pivot table as **CSV** or **Excel**.
+### 6. Use password login to:
    - Save your pivot table
    - Reload old ones
    - Delete any previous data saved under your login
+  
 
 ---
 
