@@ -3,6 +3,11 @@
 
 A powerful Streamlit-based web app to **upload, process, and analyze** multiple demat/shareholding statement files (Excel or CSV) into a clean pivot table format. Ideal for individuals and financial professionals managing multi-account portfolios.
 
+## 🎯 Live Demo: 
+
+Experience the full functionality of Holdings Manager in action — upload files, generate pivots, and explore all features in the live demo:
+
+[Launch the App](https://hold-letter.streamlit.app/)
 
 
 ## 🚀 Key Features
