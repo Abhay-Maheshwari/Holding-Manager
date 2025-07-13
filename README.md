@@ -141,7 +141,8 @@ Open the browser at the address shown in the terminal (e.g., `http://localhost:8
    - Save your pivot table
    - Reload old ones
    - Delete any previous data saved under your login
-  
+
+ ## Want to see it in action? My video walkthrough is now ready! Watch it here: [Walkthrough](https://youtu.be/oOMhGSI74yQ)
 
 ---
 
@@ -171,4 +172,4 @@ MIT License – use freely, modify, and share with credit.
 ## 👤 Author
 
 **Abhay Maheshwari**  
-💼 [LinkedIn](https://linkedin.com/maheshwari-abhay) | 🛠️ [GitHub](https://github.com/abhay-maheshwari)
+💼 [LinkedIn](https://linkedin.com/in/maheshwari-abhay) | 🛠️ [GitHub](https://github.com/abhay-maheshwari)
